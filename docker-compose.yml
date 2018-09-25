@@ -1,0 +1,22 @@
+version: '3.5'
+services:
+  db:
+    build: ./docker/db
+    container_name: boon-db
+    networks:
+      - fontoberta
+  web:
+    build: .
+    command: /usr/local/bin/uwsgi --http :8000 --chdir /code --socket boon.sock  --master --processes 5 --vacuum --module boon.wsgi
+    container_name: boon-service
+    volumes:
+      - .:/code
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+    networks:
+      - fontoberta
+networks:
+  fontoberta:
+    name: fontoberta-network

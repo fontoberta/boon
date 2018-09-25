@@ -1,0 +1,19 @@
+# /etc/systemd/system/
+[Unit]
+Description=uWSGI instance to serve boon
+After=network.target
+
+[Service]
+User=<user>
+Group=www-data
+WorkingDirectory=<Project Root Directory>
+Environment="PATH=<Environment Directory>/bin"
+Environment="BOON_DB_NAME="
+Environment="BOON_DB_USER="
+Environment="BOON_DB_PASSWORD="
+Environment="BOON_DB_PORT="
+Environment="BOON_DB_HOST="
+ExecStart=<Environment Directory>/bin/uwsgi --http :8004 --chdir <Project Root Directory> --socket boon.sock  --master --processes 5 --vacuum --module boon.wsgi
+
+[Install]
+WantedBy=multi-user.target
